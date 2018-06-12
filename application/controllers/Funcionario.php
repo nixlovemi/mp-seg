@@ -242,4 +242,60 @@ class Funcionario extends MY_Controller {
     $redirect = base_url() . "Funcionario";
     header("location:$redirect");
   }
+
+  public function escala(){
+    $this->load->model("Tb_Funcionario_Escala");
+    $retEscala  = $this->Tb_Funcionario_Escala->getArrEscalaFunc();
+    $arrEventos = ($retEscala["erro"] == false) ? $retEscala["Eventos"]: array();
+
+    $data            = [];
+    $data["Eventos"] = $arrEventos;
+    $this->template->load('template', 'Funcionario/escala', $data);
+  }
+
+  public function jsonGerenciarEscalas(){
+    $arrRet = [];
+    $arrRet["erro"] = false;
+    $arrRet["msg"]  = "";
+    $arrRet["html"] = "";
+
+    $this->load->model("Tb_Funcionario");
+    $retFunc = $this->Tb_Funcionario->getFuncionarios();
+    $arrFunc = (!$retFunc["erro"]) ? $retFunc["arrFuncionarios"]: array();
+
+    $data                   = [];
+    $data["arrFuncionario"] = $arrFunc;
+    $htmlView               = $this->load->view('Funcionario/gerenciarEscala', $data, true);
+
+    $arrRet["html"] = $htmlView;
+
+    echo json_encode($arrRet);
+  }
+
+  public function jsonPostShowEscalaFunc(){
+    $this->load->helper("utils");
+
+    $arrRet = [];
+    $arrRet["erro"] = false;
+    $arrRet["msg"]  = "";
+    $arrRet["html"] = "";
+
+    // variaveis
+    $vFunId = $this->input->post('ge_funId');
+    $vDtIni = $this->input->post('ge_periodoIni');
+    $vDtFim = $this->input->post('ge_periodoFim');
+    // =========
+
+    $arrFilters = [];
+    $arrFilters["fue_fun_id"]   = is_numeric($vFunId) ? $vFunId: "";
+    $arrFilters["fue_dtinicio"] = strlen($vDtIni) == 10 ? acerta_data($vDtIni): "";
+    $arrFilters["fue_dtfim"]    = strlen($vDtFim) == 10 ? acerta_data($vDtFim): "";
+
+    $this->load->model("Tb_Funcionario_Escala");
+    $retHtmlFun = $this->Tb_Funcionario_Escala->htmlLstEscalaFunc($arrFilters);
+    $htmlTable  = ($retHtmlFun["erro"] == false) ? $retHtmlFun["html"]: "";
+    
+    $arrRet["html"] = $htmlTable;
+    echo json_encode($arrRet);
+  }
 }

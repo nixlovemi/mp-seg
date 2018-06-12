@@ -162,6 +162,126 @@ $(document).on('click', 'a#opnDetRelFluxoCx', function(){
 });
 // ===============
 
+// Tb_Funcionario_Escala
+function fncEditarEscala(fueId, calendarClick){
+  calendarClick = typeof calendarClick !== 'undefined' ? calendarClick : false;
+
+  $.ajax({
+    type: "POST",
+    url: HOME_URL + 'FuncionarioEscala/jsonHtmlEditEscala',
+    data: 'fueId=' + fueId,
+    dataType: 'json',
+    success: function (ret) {
+      if(ret.erro){
+        $.gritter.add({
+          title: 'Alerta',
+          text: ret.msg,
+        });
+        var maxZindex = getHighIndex();
+        $("#gritter-notice-wrapper").css({'z-index':maxZindex + 5});
+      } else {
+        var html = ret.html;
+        confirmBootbox(html, function(){
+          var variaveis = $("#frmJsonAddFuncEscala").serialize();
+          var retJson   = mvc_post_json_ajax_var('FuncionarioEscala', 'jsonEditFuncEscala', variaveis);
+
+          if(retJson.erro){
+            $.gritter.add({
+    					title: 'Alerta',
+    					text: retJson.msg,
+    				});
+            var maxZindex = getHighIndex();
+            $("#gritter-notice-wrapper").css({'z-index':maxZindex + 5});
+
+            return false;
+          } else {
+            if(calendarClick){
+              document.location.href = HOME_URL + 'Funcionario/escala';
+            } else {
+              $("#frmShowEscalaFunc #btnShowEscalaFunc").click();
+            }
+          }
+        });
+        setTimeout("loadObjects()", 750);
+      }
+    }
+  });
+}
+
+$(document).on('click', '#dvRetPostShowEscalaFunc .TbFuncionarioEscala_ajax_deletar', function(){
+	var fueId = $(this).data("id");
+	var html  = 'Gostaria de deletar essa Escala ' + fueId + '?';
+
+	confirmBootbox(html, function(){
+    $.ajax({
+      type: "POST",
+      url: HOME_URL + 'FuncionarioEscala/jsonDelEscala',
+      data: 'fueId=' + fueId,
+  		dataType: 'json',
+  		success: function (ret) {
+  			var erro            = ret.erro;
+  			var msg             = ret.msg;
+
+  			if(erro){
+  				$.gritter.add({
+  					title: 'Alerta',
+  					text: msg,
+  				});
+  			} else {
+          $("#frmShowEscalaFunc #btnShowEscalaFunc").click();
+  			}
+      }
+    });
+	});
+});
+
+$(document).on('click', '#dvRetPostShowEscalaFunc .TbFuncionarioEscala_ajax_alterar', function(){
+	var fueId = $(this).data("id");
+  fncEditarEscala(fueId);
+});
+
+$(document).on('click', '#dvRetPostShowEscalaFunc .TbFuncionarioEscala_ajax_add', function(){
+	var funId = $("#frmShowEscalaFunc #ge_funId").val();
+
+  $.ajax({
+    type: "POST",
+    url: HOME_URL + 'FuncionarioEscala/jsonHtmlAddEscala',
+    data: 'funId=' + funId,
+    dataType: 'json',
+    success: function (ret) {
+      if(ret.erro){
+        $.gritter.add({
+          title: 'Alerta',
+          text: ret.msg,
+        });
+        var maxZindex = getHighIndex();
+        $("#gritter-notice-wrapper").css({'z-index':maxZindex + 5});
+      } else {
+        var html = ret.html;
+        confirmBootbox(html, function(){
+          var variaveis = $("#frmJsonAddFuncEscala").serialize();
+          var retJson   = mvc_post_json_ajax_var('FuncionarioEscala', 'jsonAddFuncEscala', variaveis);
+
+          if(retJson.erro){
+            $.gritter.add({
+    					title: 'Alerta',
+    					text: retJson.msg,
+    				});
+            var maxZindex = getHighIndex();
+            $("#gritter-notice-wrapper").css({'z-index':maxZindex + 5});
+
+            return false;
+          } else {
+            $("#frmShowEscalaFunc #btnShowEscalaFunc").click();
+          }
+        });
+        setTimeout("loadObjects()", 750);
+      }
+    }
+  });
+});
+// =====================
+
 // Tb_Cont_Receber
 $(document).on('click', '#btnJsonAddContaReceb', function(){
   $.ajax({
@@ -444,6 +564,41 @@ $(document).on('click', '.TbFuncionario_deletar', function(){
 		document.location.href = HOME_URL + 'Funcionario/deletar/' + funId;
 	});
 });
+
+function openGerEscalas(){
+  var retJson = mvc_post_json_ajax_var('Funcionario', 'jsonGerenciarEscalas', '');
+  if(retJson.erro){
+    $.gritter.add({
+      title: 'Alerta',
+      text: retJson.msg,
+    });
+    var maxZindex = getHighIndex();
+    $("#gritter-notice-wrapper").css({'z-index':maxZindex + 5});
+  } else {
+    openBootbox(retJson.html, false, false, false, function(){
+      document.location.href = HOME_URL + 'Funcionario/escala';
+    });
+
+    setTimeout("loadObjects()", 500);
+  }
+}
+
+function showEscalaFunc(){
+  var params  = $('#frmShowEscalaFunc').serialize();
+  var retJson = mvc_post_json_ajax_var('Funcionario', 'jsonPostShowEscalaFunc', params);
+
+  if(retJson.erro){
+    $.gritter.add({
+      title: 'Alerta',
+      text: retJson.msg,
+    });
+    var maxZindex = getHighIndex();
+    $("#gritter-notice-wrapper").css({'z-index':maxZindex + 5});
+  } else {
+    $("#dvRetPostShowEscalaFunc").html(retJson.html);
+    setTimeout("loadObjects()", 500);
+  }
+}
 // ==========
 
 function loadObjects(){
@@ -458,6 +613,7 @@ function loadObjects(){
 	});
 	$(".mask_cpf").mask("999.999.999-99");
 	$(".mask_cep").mask("99.999-999");
+  $(".mask_hora").mask("99:99");
 	$(".mask_inteiro").numeric();
 	$('.mask_moeda').mask("#.##0,00", {reverse: true});
 

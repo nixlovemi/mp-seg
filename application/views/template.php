@@ -563,6 +563,7 @@
       <script src="<?php echo base_url(); ?>js/excanvas.min.js"></script>
       <script src="<?php echo base_url(); ?>js/jquery.min.js"></script>
       <script src="<?php echo base_url(); ?>js/jquery.ui.custom.js"></script>
+      <script src="<?php echo base_url(); ?>js/moment.min.js"></script>
       <script src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
       <script src="<?php echo base_url(); ?>js/Dynatable/jquery.dynatable.js"></script>
       <script src="<?php echo base_url(); ?>js/jquery-maskmoney.v3.1.1.js"></script>

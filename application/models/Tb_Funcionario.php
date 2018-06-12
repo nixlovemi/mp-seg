@@ -1,5 +1,5 @@
 <?php
-class tb_funcionario extends CI_Model {
+class Tb_Funcionario extends CI_Model {
 
   public function getHtmlList(){
     $this->load->database();
