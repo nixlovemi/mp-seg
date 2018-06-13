@@ -104,15 +104,15 @@ if($errorMsg != ""){
           </div>
 
           <div class="control-group">
-            <label class="control-label">CPF</label>
+            <label class="control-label">CPF/CNPJ</label>
             <div class="controls">
               <!-- validate-required -->
-              <input <?php echo $strReadyonly; ?> class="span10 mask_cpf" type="text" name="cliCpfCnpj" id="cliCpfCnpj" value="<?php echo $vCliCpfCnpj; ?>" />
+              <input <?php echo $strReadyonly; ?> class="span10" type="text" name="cliCpfCnpj" id="cliCpfCnpj" value="<?php echo $vCliCpfCnpj; ?>" />
             </div>
           </div>
 
           <div class="control-group">
-            <label class="control-label">RG</label>
+            <label class="control-label">RG/IE</label>
             <div class="controls">
               <!-- validate-required -->
               <input <?php echo $strReadyonly; ?> class="span10" type="text" name="cliRgIe" id="cliRgIe" value="<?php echo $vCliRgIe; ?>" />

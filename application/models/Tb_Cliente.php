@@ -9,7 +9,7 @@ class Tb_Cliente extends CI_Model {
     $htmlTable .= "    <tr>";
     $htmlTable .= "      <th width='8%'>ID</th>";
     $htmlTable .= "      <th>Nome</th>";
-    $htmlTable .= "      <th width='10%'>CPF</th>";
+    $htmlTable .= "      <th width='10%'>CPF/CNPJ</th>";
     $htmlTable .= "      <th width='12%'>Telefone</th>";
     $htmlTable .= "      <th>Cidade</th>";
     $htmlTable .= "      <th width='8%'>Ver</th>";
@@ -122,15 +122,27 @@ class Tb_Cliente extends CI_Model {
     // cpf duplicado
     $vCliCpfCnpj = isset($arrClienteDados["cli_cpf_cnpj"]) ? $arrClienteDados["cli_cpf_cnpj"]: "";
 
-    $this->load->helper('utils');
-    $validCPF = is_cpf($vCliCpfCnpj);
-    if(!$validCPF){
-      $arrRet["erro"] = true;
-      $arrRet["msg"]  = "CPF inválido!";
-      return $arrRet;
-    }
-
     if($vCliCpfCnpj != ""){
+      $cpfCnpjLen = strlen($vCliCpfCnpj);
+      $temBarra   = strpos($vCliCpfCnpj, '/') !== false;
+      $this->load->helper('utils');
+
+      if(($cpfCnpjLen == 14 || $cpfCnpjLen == 11) && !$temBarra){
+        $validCPF = is_cpf($vCliCpfCnpj);
+        if(!$validCPF){
+          $arrRet["erro"] = true;
+          $arrRet["msg"]  = "CPF inválido!";
+          return $arrRet;
+        }
+      } else {
+        $validCNPJ = is_cnpj($vCliCpfCnpj);
+        if(!$validCNPJ){
+          $arrRet["erro"] = true;
+          $arrRet["msg"]  = "CNPJ inválido!";
+          return $arrRet;
+        }
+      }
+
       $this->load->database();
       $this->db->select("cli_id");
       $this->db->from("tb_cliente");
@@ -265,15 +277,27 @@ class Tb_Cliente extends CI_Model {
     // cpf duplicado
     $vCliCpfCnpj = isset($arrClienteDados["cli_cpf_cnpj"]) ? $arrClienteDados["cli_cpf_cnpj"]: "";
 
-    $this->load->helper('utils');
-    $validCPF = is_cpf($vCliCpfCnpj);
-    if(!$validCPF){
-      $arrRet["erro"] = true;
-      $arrRet["msg"]  = "CPF inválido!";
-      return $arrRet;
-    }
-
     if($vCliCpfCnpj != ""){
+      $cpfCnpjLen = strlen($vCliCpfCnpj);
+      $temBarra   = strpos($vCliCpfCnpj, '/') !== false;
+      $this->load->helper('utils');
+
+      if(($cpfCnpjLen == 14 || $cpfCnpjLen == 11) && !$temBarra){
+        $validCPF = is_cpf($vCliCpfCnpj);
+        if(!$validCPF){
+          $arrRet["erro"] = true;
+          $arrRet["msg"]  = "CPF inválido!";
+          return $arrRet;
+        }
+      } else {
+        $validCNPJ = is_cnpj($vCliCpfCnpj);
+        if(!$validCNPJ){
+          $arrRet["erro"] = true;
+          $arrRet["msg"]  = "CNPJ inválido!";
+          return $arrRet;
+        }
+      }
+
       $this->load->database();
       $this->db->select("cli_id");
       $this->db->from("tb_cliente");

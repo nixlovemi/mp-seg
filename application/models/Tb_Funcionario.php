@@ -150,16 +150,16 @@ class Tb_Funcionario extends CI_Model {
 
     // cpf duplicado
     $vFunCpfCnpj = isset($arrFuncionarioDados["fun_cpf_cnpj"]) ? $arrFuncionarioDados["fun_cpf_cnpj"]: "";
-
     $this->load->helper('utils');
-    $validCPF = is_cpf($vFunCpfCnpj);
-    if(!$validCPF){
-      $arrRet["erro"] = true;
-      $arrRet["msg"]  = "CPF inválido!";
-      return $arrRet;
-    }
 
     if($vFunCpfCnpj != ""){
+      $validCPF = is_cpf($vFunCpfCnpj);
+      if(!$validCPF){
+        $arrRet["erro"] = true;
+        $arrRet["msg"]  = "CPF inválido!";
+        return $arrRet;
+      }
+
       $this->load->database();
       $this->db->select("fun_id");
       $this->db->from("tb_funcionario");
@@ -293,16 +293,16 @@ class Tb_Funcionario extends CI_Model {
 
     // cpf duplicado
     $vFunCpfCnpj = isset($arrFuncionarioDados["fun_cpf_cnpj"]) ? $arrFuncionarioDados["fun_cpf_cnpj"]: "";
-
     $this->load->helper('utils');
-    $validCPF = is_cpf($vFunCpfCnpj);
-    if(!$validCPF){
-      $arrRet["erro"] = true;
-      $arrRet["msg"]  = "CPF inválido!";
-      return $arrRet;
-    }
 
     if($vFunCpfCnpj != ""){
+      $validCPF = is_cpf($vFunCpfCnpj);
+      if(!$validCPF){
+        $arrRet["erro"] = true;
+        $arrRet["msg"]  = "CPF inválido!";
+        return $arrRet;
+      }
+
       $this->load->database();
       $this->db->select("fun_id");
       $this->db->from("tb_funcionario");
